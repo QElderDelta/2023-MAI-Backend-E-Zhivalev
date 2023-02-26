@@ -22,7 +22,7 @@ def test_correct_update_logic(test_cache):
 
     test_cache.set('key4', 'value4')
 
-    assert test_cache.get('key1') == 'value'
+    assert test_cache.get('key1') == 'value1'
     assert test_cache.get('key4') == 'value4'
     assert test_cache.get('key2') == ''
 
