@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for autoru_ripoff project.
 
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'autoru_ripoff.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT')
     }
 }
 
