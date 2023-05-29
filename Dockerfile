@@ -1,7 +1,7 @@
 FROM ubuntu
 
 RUN apt-get clean && apt-get update -y
-RUN apt-get -y install python3 pip
+RUN apt-get -y install python3 pip libpq-dev
 
 COPY requirements.txt .
 RUN python3 -m pip install -r requirements.txt
