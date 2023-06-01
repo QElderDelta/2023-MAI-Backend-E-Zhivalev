@@ -12,17 +12,17 @@ class CarBrand(models.Model):
 
 class CarModel(models.Model):
     name = models.CharField(max_length=50, blank=False)
-    brand_id = models.OneToOneField(CarBrand, on_delete=models.CASCADE)
+    brand_id = models.ForeignKey(CarBrand, on_delete=models.CASCADE)
 
 
 class Listing(models.Model):
-    car_brand = models.OneToOneField(CarBrand, on_delete=models.CASCADE)
-    car_model = models.OneToOneField(CarModel, on_delete=models.CASCADE)
+    car_brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE)
+    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
     price = models.IntegerField(validators=[MinValueValidator(1)])
     mileage = models.PositiveIntegerField()
     number_of_owners = models.PositiveIntegerField(
         validators=[MinValueValidator(0)])
-    engine_type = models.OneToOneField(EngineType, on_delete=models.CASCADE)
+    engine_type = models.ForeignKey(EngineType, on_delete=models.CASCADE)
     engine_volume = models.FloatField(validators=[MinValueValidator(0.01)])
     horse_power = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
