@@ -75,32 +75,6 @@ class SingleListing(generics.RetrieveUpdateDestroyAPIView):
 
 
 @require_http_methods(['GET'])
-def all_listings(request):
-    result = []
-
-    brand = request.GET.get('brand')
-
-    if brand is not None:
-        actual_object = CarBrand.objects.filter(
-            name=brand)
-
-        if len(actual_object) != 1:
-            return HttpResponseBadRequest(f'Brand {brand} does not exist')
-
-        brand_id = actual_object[0].id
-
-        for entry in Listing.objects.filter(car_brand=brand_id):
-            result.append(ListingView.convert_field_with_indices(
-                model_to_dict(entry)))
-    else:
-        for entry in Listing.objects.all():
-            result.append(ListingView.convert_field_with_indices(
-                model_to_dict(entry)))
-
-    return JsonResponse({'listings': result})
-
-
-@require_http_methods(['GET'])
 def search_by_query(request):
     query = request.GET.get('q')
 
@@ -119,33 +93,3 @@ def search_by_query(request):
             model_to_dict(entry)))
 
     return JsonResponse({'listings': result})
-
-
-@require_http_methods(['GET'])
-def get_user_profile(request, id):
-    result = dict()
-
-    necessary_fields = ['username', 'email', 'first_name', 'last_name']
-
-    for field, value in model_to_dict(get_object_or_404(User, pk=id)).items():
-        if field in necessary_fields:
-            result[field] = value
-
-    return JsonResponse({'user': result})
-
-
-@require_http_methods(['POST'])
-def add_user(request):
-    user = User()
-
-    for field_name in ['username', 'password', 'email', 'first_name', 'last_name']:
-        field_value = request.POST.get(field_name)
-
-        if field_value is None:
-            return HttpResponseBadRequest(f'Missing field {field_name}')
-
-        setattr(user, field_name, field_value)
-
-    user.save()
-
-    return JsonResponse({'user': {'id': user.id}})
