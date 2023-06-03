@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User
-from django.core import serializers
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q
+from rest_framework import generics
 
 from .models import *
+from .serializers import ListingSerializer
 
 
 class ListingView(View):
@@ -61,6 +62,16 @@ class ListingView(View):
         listing.save()
 
         return JsonResponse({'listing': {'id': f'{listing.id}'}})
+
+
+class ListingsList(generics.ListAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+
+
+class SingleListing(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
 
 
 @require_http_methods(['GET'])
