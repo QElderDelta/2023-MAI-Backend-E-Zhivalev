@@ -163,10 +163,12 @@ class ListingsTest(TestCase):
         self.assertEqual(res.status_code, 200, res.content)
         self.assertEqual(len(res.json()['listings']), 0)
 
-    @patch('listings.models.Listing.objects.filter')
-    def test_search_calls_filter(self, filter_mock):
+    @patch('listings.models.CarModel.objects.filter')
+    @patch('listings.models.CarBrand.objects.filter')
+    def test_search_calls_filter(self, car_brand_filter_mock, car_model_filter_mock):
         res = self.client.get(
             '/api/listings/search?q=BMW')
         self.assertEqual(res.status_code, 200, res.content)
 
-        self.assertEqual(int(filter_mock.called_count), 1)
+        self.assertEqual(int(car_brand_filter_mock.called_count), 1)
+        self.assertEqual(int(car_model_filter_mock.called_count), 1)
